@@ -1,5 +1,6 @@
 package com.example.khoahocjava.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ public class Course {
     private String name;
     @Column(name = "number_lecture")
     private int numberOfLectures;
+    @JsonManagedReference
     @ManyToMany
     @JoinTable(name = "course_student",
             joinColumns = @JoinColumn(name = "course_id"),

@@ -1,5 +1,6 @@
 package com.example.khoahocjava.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,6 +20,7 @@ public class Student {
     private String email;
     @Column(columnDefinition = "varchar(50) default 'Studying'")
     private String status;
+    @JsonBackReference
     @ManyToMany(mappedBy = "students")
     private Set<Course> courses;
 }
