@@ -29,7 +29,7 @@ public class CourseServiceIplm implements CourseService {
 
     @Override
     public Course updateCourse(int id, Course cs) {
-        Course course = new Course();
+        Course course = courseRepository.findById(id).orElse(null);
         course.setName(cs.getName());
         course.setNumberOfLectures(cs.getNumberOfLectures());
         course.setStudents(cs.getStudents());

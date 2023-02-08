@@ -14,11 +14,10 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
-    @PostMapping("insert")
+    @PostMapping("insert/course")
     public ResponseEntity<Course> insert(@RequestBody Course course) {
         return ResponseEntity.ok(courseService.insertCourse(course));
     }
-
     @GetMapping(value = "all/course")
     public ResponseEntity<List<Course>> getAll1() {
         return ResponseEntity.ok(courseService.getAllCourse());
