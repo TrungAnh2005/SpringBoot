@@ -25,7 +25,7 @@ public class OrderController {
         return ResponseEntity.ok(orderService.updateOrder(orderDTO,id));
     }
     @GetMapping("getall")
-    public ResponseEntity<List<Order>> getALL(){
-        return ResponseEntity.ok(orderService.getAllorder());
+    public ResponseEntity<List<OrderDTO>> getALL(){
+        return ResponseEntity.ok(orderService.getAllOrder());
     }
 }

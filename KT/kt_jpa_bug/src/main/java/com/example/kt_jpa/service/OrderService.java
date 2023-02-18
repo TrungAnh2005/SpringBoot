@@ -10,6 +10,6 @@ public interface OrderService {
 
     String updateOrder(OrderDTO dto, int id);
 
-    List<Order> getAllorder();
+    List<OrderDTO> getAllOrder();
 
 }

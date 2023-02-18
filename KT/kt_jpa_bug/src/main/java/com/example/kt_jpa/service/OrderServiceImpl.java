@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -51,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
                 customer.getWallet().setBalance(balance - shipPrice);
                 order.setCustomer(customer);
             } else {
-       //         System.out.println("you need to top up" );
+                //         System.out.println("you need to top up" );
                 double chargeMoney = 50000;
                 customer.getWallet().setBalance(balance + chargeMoney - shipPrice);
                 order.setCustomer(customer);
@@ -63,7 +61,10 @@ public class OrderServiceImpl implements OrderService {
             wallet.setAccountNumber(dto.getCustomer().getWallet().getAccountNumber());
             wallet.setBalance(dto.getCustomer().getWallet().getBalance());
             walletRepository.save(wallet);
-            Customer customerNew = mapper.map(dto.getCustomer(), Customer.class);
+            // Tạo mới tài khoản người dùng khi check không thấy trên hệ thống
+            Customer customerNew = mapper.map(dto.getCustomer(), Customer.class);//map(ánh xạ) dữ liệu của @Entity Customer
+            // sang customer(customer này là thuộc Customer DTO) nhằn không hiễn thị thông tin bảo mật của người dùng như tk , mk ..vv ,
+            // nói chung là những thứ lưu trong để trong DTO ntn thì map ra y như v thôi
             customerNew.setWallet(wallet);
             customerRepository.save(customerNew);
             order.setCustomer(customerNew);
@@ -85,12 +86,16 @@ public class OrderServiceImpl implements OrderService {
         order.setPrice(totalPrice(dto.getProducts()));
 
 //        order.setProducts(dto.getProducts());
-        orderRepository.save(order);
+
         Set<Product> products = dto.getProducts().stream().map(productDTO -> mapper.map(productDTO, Product.class)).collect(Collectors.toSet());
-        for (Product p : products) {
+        for (Product p : products) { // khi liệt kê ra một sản phẩm mới sẽ được set vào order
             p.setOrder(order);
         }
-        productRepository.saveAll(products);
+        //Tạo mới một  Set danh sách sản phẩm sau đấy map lại dữ liệu Set danh sách của Product DTO .
+        // Product không cần find by ID vì khi khách mua hàng thì sẽ tạo ra một danh sách sản phẩm mới nên sẽ không có sẵn trong bảng cơ sở dữ liệu để lấy ra.
+        productRepository.saveAll(products); // lưa tất cả sản phẩn được liệt kê ra vào CSDL
+        order.setProducts(products);
+        orderRepository.save(order);
         return order;
     }
 
@@ -102,13 +107,17 @@ public class OrderServiceImpl implements OrderService {
         shiper.getWallet().setBalance(shiper.getWallet().getBalance() + order.getPrice() * 0.1);
         orderRepository.save(order);
         shipperRepository.save(shiper);
-        return "đã giao hàng thành công" ;
+        return "đã giao hàng thành công";
     }
 
     @Override
-    public List<Order> getAllorder() {
-        return orderRepository.findAll();
+    public List<OrderDTO> getAllOrder() {
+        ModelMapper mapper = new ModelMapper();
+        List<Order> orders = orderRepository.findAll();
+        List<OrderDTO> orderDTOS = orders.stream().map(order -> mapper.map(order, OrderDTO.class)).collect(Collectors.toList());
+        return orderDTOS;
     }
+
 
     private double totalPrice(Set<ProductDTO> products) {
 

@@ -31,13 +31,13 @@ public class VoteServiceIplm implements VoteService {
         Order order = orderRepository.findById(voteDTO.getOrder_id()).get();
         vote.setOrder(order);
         Shiper shiper = shipperRepository.findById(voteDTO.getShipper_id()).get();
+        vote.setShiper(shiper);
+        Customer customer = customerRepository.findById(voteDTO.getOrder_id()).get();
         if (vote.getRate() < 3) {
             double punish = order.getPrice() * 0.05;
             shiper.getWallet().setBalance(shiper.getWallet().getBalance() - punish);
             shipperRepository.save(shiper);
         }
-        vote.setShiper(shiper);
-        Customer customer = customerRepository.findById(voteDTO.getOrder_id()).get();
         vote.setCustomer(customer);
         voteRepository.save(vote);
         return "đơn hàng đã được vote ";
