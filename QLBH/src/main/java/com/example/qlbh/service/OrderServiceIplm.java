@@ -56,14 +56,16 @@ public class OrderServiceIplm implements OrderService {
         System.out.println("Current: " + currentDate);
         order.setTimeOrder(currentDate);
         order.setTotal(totalPrice(orderDTO.getProducts()));
-        orderRepository.save(order);
+
 
         Set<Product> products = orderDTO.getProducts().stream().map(productDTO -> mapper.map(productDTO, Product.class)).collect(Collectors.toSet());
         for (Product p : products) {
             p.setOrder(order);
         }
         productRepository.saveAll(products);
+        order.setProducts(products);
 
+        orderRepository.save(order);
         return order;
     }
 
