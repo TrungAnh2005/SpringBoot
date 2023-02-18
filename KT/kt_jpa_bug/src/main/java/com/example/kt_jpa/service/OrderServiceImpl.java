@@ -49,22 +49,20 @@ public class OrderServiceImpl implements OrderService {
                 customer.getWallet().setBalance(balance - shipPrice);
                 order.setCustomer(customer);
             } else {
-                //         System.out.println("you need to top up" );
+
                 double chargeMoney = 50000;
                 customer.getWallet().setBalance(balance + chargeMoney - shipPrice);
                 order.setCustomer(customer);
             }
 
         } else {
-//            System.out.println("số điện thoại không tồn tại bạn cần tạo tk mơi" + dto.getCustomer().getPhone());
+
             Wallet wallet = new Wallet();
             wallet.setAccountNumber(dto.getCustomer().getWallet().getAccountNumber());
             wallet.setBalance(dto.getCustomer().getWallet().getBalance());
             walletRepository.save(wallet);
-            // Tạo mới tài khoản người dùng khi check không thấy trên hệ thống
-            Customer customerNew = mapper.map(dto.getCustomer(), Customer.class);//map(ánh xạ) dữ liệu của @Entity Customer
-            // sang customer(customer này là thuộc Customer DTO) nhằn không hiễn thị thông tin bảo mật của người dùng như tk , mk ..vv ,
-            // nói chung là những thứ lưu trong để trong DTO ntn thì map ra y như v thôi
+
+            Customer customerNew = mapper.map(dto.getCustomer(), Customer.class);
             customerNew.setWallet(wallet);
             customerRepository.save(customerNew);
             order.setCustomer(customerNew);
@@ -85,15 +83,14 @@ public class OrderServiceImpl implements OrderService {
         order.setShiper(shiper);
         order.setPrice(totalPrice(dto.getProducts()));
 
-//        order.setProducts(dto.getProducts());
+
 
         Set<Product> products = dto.getProducts().stream().map(productDTO -> mapper.map(productDTO, Product.class)).collect(Collectors.toSet());
-        for (Product p : products) { // khi liệt kê ra một sản phẩm mới sẽ được set vào order
+        for (Product p : products) {
             p.setOrder(order);
         }
-        //Tạo mới một  Set danh sách sản phẩm sau đấy map lại dữ liệu Set danh sách của Product DTO .
-        // Product không cần find by ID vì khi khách mua hàng thì sẽ tạo ra một danh sách sản phẩm mới nên sẽ không có sẵn trong bảng cơ sở dữ liệu để lấy ra.
-        productRepository.saveAll(products); // lưa tất cả sản phẩn được liệt kê ra vào CSDL
+
+        productRepository.saveAll(products); 
         order.setProducts(products);
         orderRepository.save(order);
         return order;
