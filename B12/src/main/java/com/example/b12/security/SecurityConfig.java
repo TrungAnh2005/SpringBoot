@@ -9,7 +9,13 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+//Đây là một annotation của Spring để đánh dấu rằng class đang được định nghĩa là một class cấu hình.
+// Trong trường hợp này, class được đánh dấu bằng @Configuration sẽ chứa các cấu hình liên quan đến bảo mật cho ứng dụng web.
 @Configuration
+
+// Đây là một annotation để kích hoạt bảo mật cho ứng dụng web bằng Spring Security.
+// Nếu không có annotation này, Spring Security sẽ không hoạt động và không thực hiện các cấu hình bảo mật.
+// Khi sử dụng @EnableWebSecurity, Spring Security sẽ tự động tạo ra một số cấu hình mặc định để bảo vệ ứng dụng, và cho phép các cấu hình bảo mật tùy chỉnh thông qua các phương thức của class được đánh dấu bằng @Configuration.
 @EnableWebSecurity
 public class SecurityConfig {
     //Annotation @Bean được sử dụng để khai báo rằng phương thức sẽ trả về một đối tượng được quản lý bởi Spring.
