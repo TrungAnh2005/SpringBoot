@@ -56,10 +56,10 @@ public class SecurityConfig4 extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                // bắt exception khi xác thực hoặc phân quyền xảy ra lỗi
+                // bắt exception khi  phân quyền xảy ra lỗi
                 .exceptionHandling()
                 // điều hướng đến api /un-authorizes
-                .accessDeniedPage("/un-authorizes")
+                .accessDeniedPage("/api/un-authorizes")
                 .and()
                 // xử lý phân quyền các api
                 .authorizeRequests()

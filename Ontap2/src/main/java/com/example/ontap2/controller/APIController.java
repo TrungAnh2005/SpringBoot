@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api")
 public class APIController {
-    @GetMapping(value = "products")
+    @GetMapping(value = "/products")
     public List<Product> getProducts() {
         List<Product> products = new ArrayList<>();
         products.add(new Product("coffee machine", 150));
@@ -25,20 +25,20 @@ public class APIController {
         return products;
     }
 
-    @GetMapping(value = "you")
+    @GetMapping(value = "/you")
     public String get() {
 
         return "you";
     }
 
-    @GetMapping(value = "coffee")
+    @GetMapping(value = "/coffee")
     public String coffee() {
         return "coffee";
     }
 
     @GetMapping(value = "/un-authorizes")
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ResponseEntity<String> unAuthorizes() {
-        return ResponseEntity.ok("403");
+    public String unAuthorizes() {
+        return "403";
     }
 }
