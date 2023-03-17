@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tìm kiếm</title>
+</head>
+<body>
+<form action="#" th:action="@{/book/search}" method="post"
+      novalidate="novalidate" th:object="${searchrequest}">
+    <input type="text" th:field="*{keyword}" placeholder="type keyword here"/><br><br>
+    <button type="submit">Search</button>
+</form>
+</body>
+</html>
